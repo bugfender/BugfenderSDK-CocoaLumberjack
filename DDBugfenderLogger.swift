@@ -24,9 +24,16 @@ class DDBugfenderLogger: DDAbstractLogger {
         guard let logMessage = logMessage else {
             return
         }
-
-        let message = logFormatter?.format(message: logMessage) ?? logMessage.message
         
+        let ivar = class_getInstanceVariable(object_getClass(self), "_logFormatter")
+        
+        var message : String!
+        if let formatter = object_getIvar(self, ivar) as? DDLogFormatter {
+            message = formatter.format(message: logMessage)
+        } else {
+            message = logMessage.message
+        }
+
         var logLevel: BFLogLevel!
         switch logMessage.flag {
         case DDLogFlag.error:
