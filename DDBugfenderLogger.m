@@ -38,12 +38,12 @@ static DDBugfenderLogger *sharedInstance;
         
         NSString* tagName = @(logMessage->_context).stringValue;
         
-        [Bugfender logLineNumber:logMessage->_line \
-                          method:logMessage->_function \
-                            file:logMessage->_fileName \
-                           level:logLevel \
-                             tag:tagName \
-                          message:message];\
+        [Bugfender logWithLineNumber:logMessage->_line \
+                              method:logMessage->_function \
+                                file:logMessage->_fileName \
+                               level:logLevel \
+                                 tag:tagName \
+                             message:message];
     }
 }
 
