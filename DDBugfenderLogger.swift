@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Bugfender
+import BugfenderSDK
 import CocoaLumberjack
 
 class DDBugfenderLogger: DDAbstractLogger {
@@ -20,11 +20,7 @@ class DDBugfenderLogger: DDAbstractLogger {
         
     }
     
-    override func log(message logMessage: DDLogMessage!) {
-        guard let logMessage = logMessage else {
-            return
-        }
-        
+    override func log(message logMessage: DDLogMessage) {
         let ivar = class_getInstanceVariable(object_getClass(self), "_logFormatter")
         
         var message : String!
@@ -46,7 +42,7 @@ class DDBugfenderLogger: DDAbstractLogger {
         
         let tagName = String(logMessage.context)
         
-        Bugfender.log(withLineNumber: Int(logMessage.line),
+        Bugfender.log(lineNumber: Int(logMessage.line),
                       method: logMessage.function,
                       file: logMessage.fileName,
                       level: logLevel,
@@ -54,8 +50,9 @@ class DDBugfenderLogger: DDAbstractLogger {
                       message: message)
     }
     
-    override var loggerName: String! {
-        return "com.bugfender.cocoalumberjack"
+    override public var loggerName: String {
+        get {
+            return "com.bugfender.cocoalumberjack"
+        }
     }
-    
 }
