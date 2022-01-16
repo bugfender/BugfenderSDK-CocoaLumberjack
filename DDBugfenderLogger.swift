@@ -24,7 +24,8 @@ class DDBugfenderLogger: DDAbstractLogger {
         let ivar = class_getInstanceVariable(object_getClass(self), "_logFormatter")
         
         var message : String!
-        if let formatter = object_getIvar(self, ivar) as? DDLogFormatter {
+        if let ivar = ivar,
+           let formatter = object_getIvar(self, ivar) as? DDLogFormatter {
             message = formatter.format(message: logMessage)
         } else {
             message = logMessage.message
@@ -43,16 +44,16 @@ class DDBugfenderLogger: DDAbstractLogger {
         let tagName = String(logMessage.context)
         
         Bugfender.log(lineNumber: Int(logMessage.line),
-                      method: logMessage.function,
+                      method: logMessage.function ?? "",
                       file: logMessage.fileName,
                       level: logLevel,
                       tag: tagName,
                       message: message)
     }
     
-    override public var loggerName: String {
+    override public var loggerName: DDLoggerName {
         get {
-            return "com.bugfender.cocoalumberjack"
+            return DDLoggerName("com.bugfender.cocoalumberjack")
         }
     }
 }
